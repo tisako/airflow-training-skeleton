@@ -5,8 +5,6 @@ import airflow
 # noinspection PyPackageRequirements
 from airflow import DAG
 # noinspection PyPackageRequirements
-from airflow.operators.bash_operator import BashOperator
-# noinspection PyPackageRequirements
 from airflow.operators.dummy_operator import DummyOperator
 # noinspection PyPackageRequirements
 from airflow.operators.python_operator import PythonOperator, BranchPythonOperator
@@ -54,7 +52,7 @@ with DAG(
         python_callable=branch_func
     )
 
-    sleep = map(email, set(nameList))
+    sleep = list(map(email, set(nameList)))
 
     the_end = DummyOperator(
         task_id='the_end'
