@@ -10,6 +10,8 @@ from airflow.operators.dummy_operator import DummyOperator
 from airflow.operators.python_operator import PythonOperator, BranchPythonOperator
 
 # noinspection PyUnresolvedReferences
+from airflow.utils.trigger_rule import TriggerRule
+
 args = {
     'owner': 'Airflow',
     'start_date': airflow.utils.dates.days_ago(9),
@@ -24,11 +26,11 @@ def print_date(**context):
 
 
 def get_week_day(context):
-    return datetime.fromisoformat(context['execution_date']).weekday()
+    return context['execution_date'].weekday()
 
 
 def email(name: str) -> DummyOperator:
-    return DummyOperator(task_id='email_' + str(name))
+    return DummyOperator(task_id=str(name))
 
 
 def branch_func(**context):
@@ -55,7 +57,8 @@ with DAG(
     sleep = list(map(email, set(nameList)))
 
     the_end = DummyOperator(
-        task_id='the_end'
+        task_id='the_end',
+        trigger_rule=TriggerRule.NONE_FAILED
     )
 
     print_date >> branching >> sleep >> the_end

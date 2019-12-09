@@ -37,7 +37,7 @@ with DAG(
         python_callable=print_date
     )
 
-    sleep = map(create_bash_sleep, [1, 5, 10])
+    sleep = list(map(create_bash_sleep, [1, 5, 10]))
 
     the_end = DummyOperator(
         task_id='the_end'
