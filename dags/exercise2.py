@@ -12,7 +12,6 @@ args = {
 with DAG(
     dag_id='exercise2',
         default_args=args,
-        dagrun_timeout=timedelta(seconds=10),
         schedule_interval='@daily'
 ) as dag:
     task1 = DummyOperator(
