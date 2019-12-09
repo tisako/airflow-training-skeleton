@@ -1,4 +1,5 @@
 from datetime import timedelta
+
 import airflow
 from airflow import DAG
 from airflow.operators.dummy_operator import DummyOperator
@@ -9,10 +10,10 @@ args = {
 }
 
 with DAG(
-    dag_id='exercise1',
+    dag_id='exercise2',
         default_args=args,
         dagrun_timeout=timedelta(seconds=10),
-        schedule_interval=None
+        schedule_interval='@daily'
 ) as dag:
     task1 = DummyOperator(
         task_id='task1'
