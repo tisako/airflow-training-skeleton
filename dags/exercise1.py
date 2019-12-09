@@ -1,11 +1,17 @@
 from datetime import timedelta
-
+import airflow
 from airflow import DAG
 from airflow.operators.dummy_operator import DummyOperator
 
+args = {
+    'owner': 'Airflow',
+    'start_date': airflow.utils.dates.days_ago(2),
+}
+
 with DAG(
     dag_id='exercise1',
-    dagrun_timeout=timedelta(seconds=10)
+        default_args=args,
+        dagrun_timeout=timedelta(seconds=10)
 ) as dag:
     task1 = DummyOperator(
         task_id='task1'
