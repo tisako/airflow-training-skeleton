@@ -1,4 +1,4 @@
-from datetime import timedelta
+from datetime import timedelta, datetime
 
 # noinspection PyPackageRequirements
 import airflow
@@ -9,7 +9,7 @@ from airflow.operators.bash_operator import BashOperator
 # noinspection PyPackageRequirements
 from airflow.operators.dummy_operator import DummyOperator
 # noinspection PyPackageRequirements
-from airflow.operators.python_operator import PythonOperator
+from airflow.operators.python_operator import PythonOperator, BranchPythonOperator
 
 # noinspection PyUnresolvedReferences
 args = {
@@ -18,16 +18,27 @@ args = {
 }
 
 
+nameList = ['jan', 'peter', 'klaas', 'fred', 'jan', 'klaas', 'blob']
+
+
 def print_date(**context):
-    print(context['execution_date'])
+    print(get_week_day(context))
 
 
-def create_bash_sleep(i: int) -> BashOperator:
-    return BashOperator(task_id='wait_' + str(i), bash_command='sleep ' + str(i))
+def get_week_day(context):
+    return datetime.fromisoformat(context['execution_date']).weekday()
+
+
+def email(name: str) -> DummyOperator:
+    return DummyOperator(task_id='email_' + str(name))
+
+
+def branch_func(**context):
+    return nameList[get_week_day(context)]
 
 
 with DAG(
-    dag_id='exercise5',
+    dag_id='exercise6',
         default_args=args,
         schedule_interval=timedelta(hours=2.5)
 ) as dag:
@@ -37,10 +48,16 @@ with DAG(
         python_callable=print_date
     )
 
-    sleep = map(create_bash_sleep, [1, 5, 10])
+    branching = BranchPythonOperator(
+        task_id='branch_task',
+        provide_context=True,
+        python_callable=branch_func
+    )
+
+    sleep = map(email, nameList)
 
     the_end = DummyOperator(
         task_id='the_end'
     )
 
-    print_date >> sleep >> the_end
+    print_date >> branching >> sleep >> the_end
