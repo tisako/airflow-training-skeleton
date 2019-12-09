@@ -17,7 +17,7 @@ def print_date(**context):
 
 
 with DAG(
-    dag_id='exercise4',
+    dag_id='exercise5',
         default_args=args,
         schedule_interval=timedelta(hours=2.5)
 ) as dag:
