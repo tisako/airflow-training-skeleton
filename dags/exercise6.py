@@ -54,7 +54,7 @@ with DAG(
         python_callable=branch_func
     )
 
-    sleep = map(email, nameList)
+    sleep = map(email, set(nameList))
 
     the_end = DummyOperator(
         task_id='the_end'
