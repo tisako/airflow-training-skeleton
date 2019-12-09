@@ -13,7 +13,7 @@ args = {
 
 
 with DAG(
-    dag_id='exercise6',
+    dag_id='exercise7',
         default_args=args,
         schedule_interval=timedelta(hours=2.5)
 ) as dag:
