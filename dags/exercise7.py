@@ -21,7 +21,7 @@ with DAG(
         task_id='postges',
         postgres_conn_id='gddconnection',
         google_cloud_storage_conn_id="google_cloud_storage_default",
-        sql="select * from land_registry_price_paid_uk where transfer_date == to_date({{ execution_date.strftime('%Y-%m-%d') }}, 'YYYY-MM-DD')",
+        sql="select * from land_registry_price_paid_uk where transfer_date == '{{ execution_date.strftime('%Y-%m-%d') }}'",
         bucket='nice_bucket',
         filename='{{execution_date}}'
     )
