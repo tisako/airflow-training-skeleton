@@ -16,11 +16,10 @@ dag = DAG(
     schedule_interval="0 0 * * *",
 )
 
-rocket_hook = RocketHook()
-gcloud_storage_hook = GoogleCloudStorageHook()
-
 
 def _download_rocket_launches(ds, tomorrow_ds, **context):
+    rocket_hook = RocketHook()
+    gcloud_storage_hook = GoogleCloudStorageHook()
     tmp_file_handle = NamedTemporaryFile(delete=True)
     tmp_file_handle.write(rocket_hook.get_lauches(ds, tomorrow_ds).text)
     gcloud_storage_hook.upload(bucket="nice_bucket", filename=tmp_file_handle.name, object=f"rocket_launches/ds={ds}",
@@ -28,6 +27,7 @@ def _download_rocket_launches(ds, tomorrow_ds, **context):
 
 
 def _print_stats(ds, **context):
+    gcloud_storage_hook = GoogleCloudStorageHook()
     tmp_file_handle = NamedTemporaryFile(delete=True)
     gcloud_storage_hook.download(bucket="nice_bucket", object=f"rocket_launches/ds={ds}", filename=tmp_file_handle.name)
     data = json.load(tmp_file_handle)
