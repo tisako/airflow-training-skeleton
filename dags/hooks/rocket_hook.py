@@ -10,4 +10,4 @@ class RocketHook(HttpHook):
         super().__init__(method, http_conn_id)
 
     def get_lauches(self, startdate, enddate):
-        return super().run(endpoint=f"https://launchlibrary.net/1.4/launch?startdate={startdate}&enddate={enddate}")
+        return super().run(endpoint=f"?startdate={startdate}&enddate={enddate}")
