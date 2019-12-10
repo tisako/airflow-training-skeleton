@@ -11,4 +11,4 @@ class RocketHook(HttpHook):
 
     def get_lauches(self, startdate, enddate):
         print(enddate)
-        return super().run(endpoint=f"?startdate={startdate}&enddate={enddate}")
+        return super().run(endpoint=f"?startdate={startdate}&enddate={enddate} ")
