@@ -5,7 +5,7 @@ import airflow
 from airflow.contrib.hooks.gcs_hook import GoogleCloudStorageHook
 from airflow.models import DAG
 from airflow.operators.python_operator import PythonOperator
-from dags.hooks.rocket_hook import RocketHook
+from hooks.rocket_hook import RocketHook
 
 # noinspection PyUnresolvedReferences
 args = {"owner": "godatadriven", "start_date": airflow.utils.dates.days_ago(10)}
